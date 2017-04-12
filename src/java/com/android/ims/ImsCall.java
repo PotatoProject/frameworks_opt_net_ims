@@ -1117,6 +1117,7 @@ public class ImsCall implements ICall {
 
         synchronized(mLockObj) {
             mSession = session;
+            mIsConferenceHost = true;
 
             try {
                 session.setListener(createCallSessionListener());
@@ -2367,6 +2368,11 @@ public class ImsCall implements ICall {
                 logi("callSessionStartFailed :: not supported for transient conference session=" +
                         session);
                 return;
+            }
+            if (mIsConferenceHost) {
+                // If the dial request was a group calling one, this call would have
+                // been marked the conference host as part of the request.
+                mIsConferenceHost = false;
             }
 
             ImsCall.Listener listener;
